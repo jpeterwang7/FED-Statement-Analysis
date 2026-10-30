@@ -15,6 +15,8 @@ so there are 8 regular statements per year plus emergency/intermeeting ones (e.g
 | `fomc_statements_metadata.csv` | One row per statement (columns below) |
 | `raw/fomc_statements_raw.json` | Raw scrape: every statement's paragraphs, source URL, release date/time as printed |
 | `scripts/build_corpus.py` | Rebuilds the txt files and CSV from the raw JSON: `python3 scripts/build_corpus.py` |
+| `fomc_sentences.csv` | One row per sentence (voting records left out), with decision/admin tags. Columns below |
+| `scripts/segment_sentences.py` | Rebuilds `fomc_sentences.csv` from the txt files: `python3 scripts/segment_sentences.py` (run after `build_corpus.py`) |
 
 For most analysis, filter to `meeting_type == "scheduled"` and `statement_kind == "main"` (213 rows).
 
@@ -46,3 +48,23 @@ For most analysis, filter to `meeting_type == "scheduled"` and `statement_kind =
 | press_conference | Whether the Fed lists a press conference for that meeting |
 | word_count, word_count_excl_votes, paragraph_count, char_count | Length measures (whitespace word count) |
 | source_url | Link to the statement on federalreserve.gov |
+
+## Sentences CSV
+
+`fomc_sentences.csv` splits every statement into sentences (2,980 rows). The sentence is the unit for FinBERT / LLM labels,
+dictionary scores and BERTopic; average back up to the statement with `statement_id`.
+
+| Column | Meaning |
+|---|---|
+| sentence_id | `<statement_id>_sNN`. Unique key for joining scores and hand labels |
+| statement_id, release_date | Join to `fomc_statements_metadata.csv` |
+| paragraph | Paragraph number in the txt file, counting from 1 (vote paragraphs included in the count) |
+| sentence | Position of the sentence in the statement, counting from 1 (vote paragraphs left out) |
+| text | Sentence text with whitespace normalized |
+| word_count | Whitespace word count |
+| is_decision | Sentence announces the fed funds rate setting (e.g. "decided to raise the target range…"). Leave these out to measure language beyond the rate decision. Some also carry guidance ("…and anticipates that ongoing increases will be appropriate"), and three 2013 statements have two |
+| is_admin | Procedural text: discount-rate and other Board actions, the 2019–2020 Desk directives, changes to how votes and minutes are released. Usually left out of tone measures |
+
+- Left out: voting paragraphs (same rule as `build_corpus.py`) and the "Federal Reserve Actions" / "Joint Statement by Central Banks" headings in 2008–2010.
+- Fixed while splitting: a footnote marker in 2010-08-10 (`securities.1 The`) and a sentence broken across two paragraphs in 2004-12-14.
+- Only about half the sentences are unique (1,521 of 2,980); boilerplate like "Consistent with its statutory mandate…" repeats dozens of times. Dedupe on `text` before fitting BERTopic.
