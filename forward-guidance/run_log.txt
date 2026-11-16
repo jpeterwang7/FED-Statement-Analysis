@@ -1,0 +1,60 @@
+NOTE: clean_text / clean_text_phrases not in the scored file; building them from 'text'.
+pool (train + tuning): 2048 rows | test: 300 rows | dropped as exact text duplicates of test sentences: 632
+numeric features: ['paragraph', 'sentence', 'word_count', 'is_decision', 'is_admin', 'is_first', 'is_last']
+tone features   : ['tone_score', 'tone_change', 'tone_hawkish', 'tone_neutral', 'tone_dovish']
+
+=================== text column: clean_text ===================
+top CV settings:
+ text_column   C  w_context  w_numeric  w_tone  cv_macro_f1  cv_f1_yes  cv_accuracy  last_fold_macro_f1
+ clean_text 3.0        0.0        0.4     0.0        0.915      0.920        0.915               0.883
+ clean_text 3.0        0.3        0.4     0.0        0.913      0.918        0.914               0.910
+ clean_text 3.0        0.3        0.2     0.0        0.913      0.919        0.914               0.927
+ clean_text 0.3        0.3        0.2     0.0        0.913      0.918        0.913               0.952
+ clean_text 3.0        0.0        0.2     0.0        0.912      0.917        0.912               0.902
+  best CV macro-F1 with no context : 0.915
+  best CV macro-F1 with no numeric : 0.904
+  best CV macro-F1 with no tone    : 0.915
+  best CV macro-F1 with text only  : 0.904
+TEST vs HAND, same pipeline WITHOUT tone: macro-F1 0.812 | F1(Yes) 0.897 | acc 0.850
+
+TEST vs HAND labels : macro-F1 0.812 (95% CI 0.759-0.859) | F1(Yes) 0.897 | acc 0.850
+TEST vs LLM  labels : macro-F1 0.812 | F1(Yes) 0.897
+confusion (rows=hand No/Yes, cols=pred No/Yes):
+ [[ 60  41]
+ [  4 195]]
+   2000-2018: macro-F1 0.848  (n=100)
+   2019-2022: macro-F1 0.807  (n=100)
+   2023-2026: macro-F1 0.781  (n=100)
+  strongest FORWARD n-grams : will, likely, likely to, be, term, near term, near term risks, term risks to, term risks, some further, as, economy
+  strongest NOT-forward     : have, has, spending, recent, continues, continues to, diminished, remains, been, has been, of these, continued
+  tone-block weights (scaled units): tone_score=+0.000, tone_change=+0.000, tone_hawkish=+0.000, tone_neutral=+0.000, tone_dovish=+0.000
+
+=================== text column: clean_text_phrases ===================
+top CV settings:
+        text_column   C  w_context  w_numeric  w_tone  cv_macro_f1  cv_f1_yes  cv_accuracy  last_fold_macro_f1
+clean_text_phrases 3.0        0.0        0.4     0.0        0.918      0.922        0.919               0.874
+clean_text_phrases 3.0        0.0        0.2     0.0        0.913      0.917        0.913               0.866
+clean_text_phrases 3.0        0.0        0.4     0.2        0.913      0.918        0.913               0.883
+clean_text_phrases 3.0        0.0        0.4     0.4        0.913      0.918        0.913               0.883
+clean_text_phrases 3.0        0.3        0.4     0.0        0.911      0.916        0.911               0.901
+  best CV macro-F1 with no context : 0.918
+  best CV macro-F1 with no numeric : 0.895
+  best CV macro-F1 with no tone    : 0.918
+  best CV macro-F1 with text only  : 0.895
+TEST vs HAND, same pipeline WITHOUT tone: macro-F1 0.812 | F1(Yes) 0.897 | acc 0.850
+
+TEST vs HAND labels : macro-F1 0.812 (95% CI 0.759-0.860) | F1(Yes) 0.897 | acc 0.850
+TEST vs LLM  labels : macro-F1 0.812 | F1(Yes) 0.897
+confusion (rows=hand No/Yes, cols=pred No/Yes):
+ [[ 60  41]
+ [  4 195]]
+   2000-2018: macro-F1 0.833  (n=100)
+   2019-2022: macro-F1 0.822  (n=100)
+   2023-2026: macro-F1 0.781  (n=100)
+  strongest FORWARD n-grams : will, likely, likely to, be, term, near term, near term risks, term risks to, term risks, some further, economy, as
+  strongest NOT-forward     : have, spending, has, recent, continues, continues to, diminished, remains, been, has been, of these, continued
+  tone-block weights (scaled units): tone_score=+0.000, tone_change=+0.000, tone_hawkish=+0.000, tone_neutral=+0.000, tone_dovish=+0.000
+
+        text_column   C  w_context  w_numeric  w_tone  cv_macro_f1  test_macro_f1_vs_hand  test_macro_f1_vs_hand_no_tone  test_f1_yes_vs_hand  test_macro_f1_vs_llm
+        clean_text 3.0        0.0        0.4     0.0        0.915                  0.812                          0.812                0.897                 0.812
+clean_text_phrases 3.0        0.0        0.4     0.0        0.918                  0.812                          0.812                0.897                 0.812
