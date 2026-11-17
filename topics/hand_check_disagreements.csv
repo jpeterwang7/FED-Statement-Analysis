@@ -1,0 +1,20 @@
+sentence_id,topic,my_theme,model_theme,text
+2008-03-11_statement_s09,2,policy,financial_stability,"Auctions will be held on a weekly basis, beginning on March 27, 2008."
+2008-12-16_statement_s10,2,balance_sheet,financial_stability,"As previously announced, over the next few quarters the Federal Reserve will purchase large quantities of agency debt and mortgage-backed securities to provide support to the mortgage and housing markets, and it stands ready to expand its purchases of agency debt and mortgage-backed securities as conditions warrant."
+2004-08-10_statement_s04,3,energy_geopolitics,inflation,This softness likely owes importantly to the substantial rise in energy prices.
+2022-06-15_statement_s05,3,energy_geopolitics,inflation,The invasion and related events are creating additional upward pressure on inflation and are weighing on global economic activity.
+2000-12-19_statement_s04,7,other,policy,The Committee will continue to monitor closely the evolving economic situation.
+2012-12-12_statement_s19,9,other,policy,The Committee views these thresholds as consistent with its earlier date-based guidance.
+2019-12-11_statement_s08,11,growth,policy,"The Committee judges that the current stance of monetary policy is appropriate to support sustained expansion of economic activity, strong labor market conditions, and inflation near the Committee's symmetric 2 percent objective."
+2002-11-06_statement_s07,18,financial_stability,policy,"With this action, the Committee believes that, against the background of its long-run goals of price stability and sustainable economic growth and of the information currently available, the risks are balanced with respect to the prospects for both goals in the foreseeable future."
+2012-01-25_statement_s06,19,labor,growth,The Committee expects economic growth over coming quarters to be modest and consequently anticipates that the unemployment rate will decline only gradually toward levels that the Committee judges to be consistent with its dual mandate.
+2018-01-31_statement_s06,24,growth,policy,"The Committee expects that, with further gradual adjustments in the stance of monetary policy, economic activity will expand at a moderate pace and labor market conditions will remain strong."
+2014-10-29_statement_s09,25,financial_stability,policy,The Committee sees the risks to the outlook for economic activity and the labor market as nearly balanced.
+2002-11-06_statement_s04,29,growth,other,"However, incoming economic data have tended to confirm that greater uncertainty, in part attributable to heightened geopolitical risks, is currently inhibiting spending, production, and employment."
+2001-09-17_statement_s06,31,financial_stability,growth,"Nonetheless, the long-term prospects for productivity growth and the economy remain favorable and should become evident once the unusual forces restraining demand abate."
+2003-12-09_statement_s07,33,policy,inflation,"However, with inflation quite low and resource use slack, the Committee believes that policy accommodation can be maintained for a considerable period."
+2010-05-09_statement_s04,37,financial_stability,policy,Central banks will continue to work together closely as needed to address pressures in funding markets.
+2014-01-29_statement_s11,38,growth,balance_sheet,"Taking into account the extent of federal fiscal retrenchment since the inception of its current asset purchase program, the Committee continues to see the improvement in economic activity and labor market conditions over that period as consistent with growing underlying strength in the broader economy."
+2016-03-16_statement_s08,39,energy_geopolitics,growth,"However, global economic and financial developments continue to pose risks."
+2008-10-08_statement_s05,47,financial_stability,policy,Some easing of global monetary conditions is therefore warranted.
+2013-01-30_statement_s08,48,other,growth,"Although strains in global financial markets have eased somewhat, the Committee continues to see downside risks to the economic outlook."

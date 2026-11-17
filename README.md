@@ -68,3 +68,47 @@ dictionary scores and BERTopic; average back up to the statement with `statement
 - Left out: voting paragraphs (same rule as `build_corpus.py`) and the "Federal Reserve Actions" / "Joint Statement by Central Banks" headings in 2008–2010.
 - Fixed while splitting: a footnote marker in 2010-08-10 (`securities.1 The`) and a sentence broken across two paragraphs in 2004-12-14.
 - Only about half the sentences are unique (1,521 of 2,980); boilerplate like "Consistent with its statutory mandate…" repeats dozens of times. Dedupe on `text` before fitting BERTopic.
+
+## Topics (BERTopic)
+
+Groups the sentences into topics, then into hand-named themes, to show what the Fed talks about in each era.
+Fitted on the **1,414 unique non-admin sentences**. Without the dedupe, repeated boilerplate would form its own topics.
+
+Setup: `python3 -m venv .venv && .venv/bin/pip install -r requirements-topics.txt`
+
+| Path | What it is |
+|---|---|
+| `scripts/fit_topics.py` | Fits the model and writes everything below: `.venv/bin/python scripts/fit_topics.py` |
+| `topics/theme_codebook.md` | Theme definitions and labeling rules for the hand steps, written before the topics were viewed |
+| `topics/unique_sentences.csv` | The deduped documents, with `n_occurrences` in the full table |
+| `topics/unique_sentence_topics.csv` | `text`, `topic_raw` (-1 = HDBSCAN outlier) and `topic` (outliers reassigned to the nearest topic) |
+| `topics/topic_info.csv` | One row per topic: size, c-TF-IDF and KeyBERT keywords, representative sentences |
+| `topics/topic_themes.csv` | **Hand-filled.** Topic → theme mapping |
+| `topics/hand_check_sample.csv` | **Hand-filled.** Blind sample of 61 sentences (at least one per topic) to label with `my_theme` |
+| `topics/hand_check_key.csv` | Model topics for the sample. Don't open it until labeling is done |
+
+Settings, all seeded (`SEED = 42`):
+- embeddings: `all-mpnet-base-v2` on CPU, cached in `topics/embeddings.npy`
+- UMAP: `n_neighbors=15, n_components=5, min_dist=0, cosine`
+- HDBSCAN: `min_cluster_size=10, min_samples=5`
+- keywords: English stop words plus "committee", 1–2-word phrases, `min_df=2`
+- outliers reassigned by embedding similarity
+
+Two runs give identical output. The three hand-filled files are created once and never overwritten by a refit. Delete one to regenerate it.
+After a refit that changes the topics, delete `topic_themes.csv` and the two `hand_check_*` files, then fill them in again.
+
+**Manual steps, in order:**
+1. Read `topics/theme_codebook.md`.
+2. Label `hand_check_sample.csv`.
+3. Map the topics in `topic_themes.csv`.
+
+4. Run `.venv/bin/python scripts/hand_check_agreement.py` and review `topics/hand_check_disagreements.csv`.
+   The first-pass mapping is kept as `topics/topic_themes_first_pass.csv`. Report agreement from that file.
+5. Run `scripts/theme_shares.py`, then `scripts/plot_streamgraph.py`.
+
+| Output | What it is |
+|---|---|
+| `fomc_sentence_topics.csv` | One row per sentence (2,980): `sentence_id`, `statement_id`, `topic`, `theme`. Admin sentences have theme `admin`. Joins to the tone scores on `sentence_id` |
+| `fomc_statement_themes.csv` | One row per statement × theme: sentence counts, `share` (by sentences) and `word_share` (by words). Admin sentences are left out, so the shares sum to 1 |
+| `fomc_statement_themes_wide.csv` | Same, one row per statement, one share column per theme |
+| `figures/theme_streamgraph.png` / `.html` | The 213 scheduled statements, smoothed with a 3-statement rolling mean for display. The HTML shows the raw share on hover |
